@@ -1,0 +1,29 @@
+# Template file for 'waterfox'
+pkgname=waterfox
+version=6.6.8
+revision=1
+archs="x86_64"
+depends="nss>=3.72 nspr>=4.32 desktop-file-utils hicolor-icon-theme pciutils"
+short_desc="Privacy first fork of Firefox"
+maintainer="Orphaned <orphan@voidlinux.org>"
+license="GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND MPL-2.0"
+homepage="https://waterfox.com"
+changelog="https://www.waterfox.com/releases/"
+distfiles="https://cdn.waterfox.com/waterfox/releases/${version}/Linux_x86_64/waterfox-${version}.tar.bz2"
+checksum=563f78b523f11b133297a0f68e0cfd2816478e3a665807c841e925218ced7188
+
+do_install() {
+	vinstall "${FILESDIR}/waterfox.desktop" 644 usr/share/applications
+
+	vmkdir opt/waterfox
+	vcopy ./ opt/waterfox
+
+	vmkdir usr/bin
+	ln -s /opt/waterfox/waterfox ${DESTDIR}/usr/bin/waterfox
+
+	for res in 16 24 32 48 64 128 256; do
+		vinstall browser/chrome/icons/default/default${res}.png 0644 \
+			usr/share/icons/hicolor/${res}x${res}/apps waterfox.png
+
+	done
+}
